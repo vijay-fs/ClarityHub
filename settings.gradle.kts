@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "FlowChartImageGenerator"
+rootProject.name = "ClarityHub"
 include(":app")
  
