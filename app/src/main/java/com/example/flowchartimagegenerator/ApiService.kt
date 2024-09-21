@@ -43,7 +43,7 @@ object Network {
         .addConverterFactory(MoshiConverterFactory.create(moshi).asLenient())
 //        .addConverterFactory(UnitConverterFactory)
         .addCallAdapterFactory(CoroutineCallAdapterFactory())
-        .baseUrl("http://172.24.1.166:3000/")
+        .baseUrl("https://1342-49-249-171-190.ngrok-free.app/")
         .client(httpClient.build())
         .build()
 

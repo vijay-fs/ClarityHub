@@ -3,6 +3,8 @@ package com.example.flowchartimagegenerator
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Base64
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -143,13 +145,23 @@ class MainActivity : ComponentActivity() {
                     Api.createRetrofitService()
                     Button(
                         onClick = {
+                            Toast.makeText(this@MainActivity, "Generating image... Request sent", Toast.LENGTH_LONG).show()
 //                            generateImage()
                             CoroutineScope(Job() + Dispatchers.IO).launch {
                                 val response = Api.retrofitService?.getImage(
                                     BodyModel(prompt = promptText.value)
                                 )?.await()
-
-                                generatedImage.value = getSampleImageBitmap(response?.body()?.image!!)
+                                response?.body()?.image?.let {
+                                    generatedImage.value = getSampleImageBitmap(it)
+                                }
+                                Log.v("MainActivity", response?.body()?.image ?: "null")
+                                runOnUiThread {
+                                    Toast.makeText(
+                                        this@MainActivity,
+                                        "Loading image as a Flow chart",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
                             }
                         },
                         modifier = Modifier
@@ -158,7 +170,9 @@ class MainActivity : ComponentActivity() {
                     ) {
                         Text(text = "Generate")
                     }
-
+                    generatedImage.value.let {
+                        Log.v("MainActivity", it.toString())
+                    }
                     Image(
 //                        bitmap = getImageBitmap(),
                         bitmap = generatedImage.value,
